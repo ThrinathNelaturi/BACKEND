@@ -16,15 +16,27 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.niit.project2B.DAO.BlogDAO;
 import com.niit.project2B.DAO.BlogLikesDAO;
+import com.niit.project2B.DAO.EventDAO;
+import com.niit.project2B.DAO.ForumCommentDAO;
+import com.niit.project2B.DAO.ForumDAO;
 import com.niit.project2B.DAO.FriendDAO;
+import com.niit.project2B.DAO.JobDAO;
 import com.niit.project2B.DAO.UserDAO;
 import com.niit.project2B.DAOImpl.BlogDAOImpl;
 import com.niit.project2B.DAOImpl.BlogLikesDAOImpl;
+import com.niit.project2B.DAOImpl.EventDAOImpl;
+import com.niit.project2B.DAOImpl.ForumCommentDAOImpl;
+import com.niit.project2B.DAOImpl.ForumDAOImpl;
 import com.niit.project2B.DAOImpl.FriendDAOImpl;
+import com.niit.project2B.DAOImpl.JobDAOImpl;
 import com.niit.project2B.DAOImpl.UserDAOImpl;
 import com.niit.project2B.model.Blog;
 import com.niit.project2B.model.BlogLikes;
+import com.niit.project2B.model.Event;
+import com.niit.project2B.model.Forum;
+import com.niit.project2B.model.ForumComment;
 import com.niit.project2B.model.Friend;
+import com.niit.project2B.model.Job;
 import com.niit.project2B.model.User;
 
 
@@ -60,11 +72,15 @@ public class ApplicationContextConfig
 		@Bean(name = "sessionFactory")
 		public SessionFactory getSessionFactory(DataSource dataSource) {
 			LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
-			sessionBuilder.addAnnotatedClasses(User.class);
-			sessionBuilder.addAnnotatedClasses(Friend.class);
+			sessionBuilder.addProperties(getHibernateProperties());
+			sessionBuilder.addAnnotatedClass(User.class);
+			sessionBuilder.addAnnotatedClass(Friend.class);
 			sessionBuilder.addAnnotatedClass(Blog.class);
 			sessionBuilder.addAnnotatedClass(BlogLikes.class);
-			sessionBuilder.addProperties(getHibernateProperties());
+			sessionBuilder.addAnnotatedClass(Event.class);
+			sessionBuilder.addAnnotatedClass(Forum.class);
+			sessionBuilder.addAnnotatedClass(Job.class);
+			sessionBuilder.addAnnotatedClass(ForumComment.class);
 			
 	
 		
@@ -104,5 +120,28 @@ public class ApplicationContextConfig
 		@Bean(name="blogLikesDAO")
 		public BlogLikesDAO getBlogLikesDAO(SessionFactory sessionFactory){
 			return new BlogLikesDAOImpl(sessionFactory);
+		}
+		@Autowired
+		@Bean(name="eventDAO")
+		public EventDAO getEventDAO(SessionFactory sessionFactory){
+			
+			return new EventDAOImpl(sessionFactory);
+		}
+		@Autowired
+		@Bean(name="forumDAO")
+		public ForumDAO getForumDAO(SessionFactory sessionFactory){
+			System.out.println("forum is done");
+			return new ForumDAOImpl(sessionFactory);
+		}
+		@Autowired
+		@Bean(name="jobDAO")
+		public JobDAO getJobDAO(SessionFactory sessionFactory){
+			
+			return new JobDAOImpl(sessionFactory);
+		}
+		@Autowired
+		@Bean(name="forumCommentDAO")
+		public ForumCommentDAO getForumCommentDAO(SessionFactory sessionFactory){
+			return new ForumCommentDAOImpl(sessionFactory);
 		}
 }

@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.niit.project2B.DAO.FriendDAO;
-/*import com.niit.project2B.DAO.UserDAO;*/
+import com.niit.project2B.DAO.UserDAO;
 import com.niit.project2B.model.Friend;
+
 
 @RestController
 public class FriendController {
 	@Autowired
 	private FriendDAO friendDAO;
-	/*@Autowired
-	private UserDAO userDAO;*/
+	@Autowired
+	private UserDAO userDAO;
 	
 	@PostMapping(value="/sendrequest/{fid}")
 	public ResponseEntity<Friend> newfriend(Friend friend,@PathVariable("fid") String fid,HttpSession session){
@@ -37,7 +38,7 @@ public class FriendController {
 	@GetMapping(value="/myfriends")
 	public ResponseEntity<List<Friend>> myfriends(HttpSession session){
 		String uid =(String) session.getAttribute("username");
-		//List<Users> u1 = null;
+		//List<User> u1 = null;
 		List<Friend> list=friendDAO.getfriendlist(uid);
 		return new ResponseEntity<List<Friend>>(list,HttpStatus.OK);
 	}

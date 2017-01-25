@@ -6,11 +6,13 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.niit.project2B.DAO.FriendDAO;
 import com.niit.project2B.model.Friend;
 
-@SuppressWarnings("deprecation")
+@Repository(value="FriendDAO")
 public class FriendDAOImpl implements FriendDAO{
 
 	@Autowired
@@ -19,7 +21,7 @@ public class FriendDAOImpl implements FriendDAO{
 		this.sessionFactory=sessionFactory;
 	}
 	
-	
+	@Transactional
 	public boolean saveorupdate(Friend friend) {
 		try {
 			sessionFactory.getCurrentSession().saveOrUpdate(friend);
@@ -29,6 +31,7 @@ public class FriendDAOImpl implements FriendDAO{
 			return false;
 		}
 	}
+	@Transactional
 	public boolean delete(Friend friend) {
 		try {
 			sessionFactory.getCurrentSession().delete(friend);
@@ -39,7 +42,7 @@ public class FriendDAOImpl implements FriendDAO{
 		}
 		
 	}
-	
+	@Transactional
 	public Friend newrequest(String uid, String fid) {
 		String hql="from Friend where userid='"+uid+"' and friendid='"+fid+"'";
 		@SuppressWarnings({ "rawtypes" })
@@ -53,6 +56,7 @@ public class FriendDAOImpl implements FriendDAO{
 		}
 		
 	}
+	@Transactional
 	public List<Friend> getfriendlist(String uid) {
 		String hql="from Friend where userid='"+uid+"' and status='a'";
 		@SuppressWarnings({ "rawtypes" })
@@ -61,6 +65,7 @@ public class FriendDAOImpl implements FriendDAO{
 		List<Friend> list = query.list();
 		return list;
 	}
+	@Transactional
 	public List<Friend> getrequestlist(String uid) {
 		String hql="from Friend where friendid='"+uid+"' and status='n'";
 		@SuppressWarnings("rawtypes")
@@ -69,6 +74,7 @@ public class FriendDAOImpl implements FriendDAO{
 		List<Friend> list = query.list();
 		return list;
 	}
+	@Transactional
 	public List<Friend> setonline(String uid) {
 		String hql="from Friend where friendid='"+uid+"'";
 		@SuppressWarnings("rawtypes")

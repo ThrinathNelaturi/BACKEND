@@ -6,11 +6,12 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.niit.project2B.DAO.UserDAO;
 import com.niit.project2B.model.User;
-
+@Repository(value="userDAO")
 public class UserDAOImpl implements UserDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -20,12 +21,11 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Transactional
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<User> list() {
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	List<User> listUser = (List<User>) sessionFactory.getCurrentSession()
-			                  .createCriteria(User.class)
-			                  .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-		return listUser;
+		Criteria c=sessionFactory.getCurrentSession().createCriteria(User.class);
+		List<User> list=c.list();
+		return list;
 	}
    
 	@Transactional
@@ -35,6 +35,7 @@ public class UserDAOImpl implements UserDAO {
 			return true;
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -48,17 +49,17 @@ public class UserDAOImpl implements UserDAO {
 		}
 		catch(Exception e)
 		{
+		e.printStackTrace();
 		return false;
 		}
 		
 	}
 
 	@Transactional
-	public User get(int id) {
+	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
+	public List<User> getuser(int id) {
 		String hql="from User where id= "+ "'"+ id+"'";
-		@SuppressWarnings("rawtypes")
 		Query query=sessionFactory.getCurrentSession().createQuery(hql);
-		@SuppressWarnings({ "unchecked", "deprecation" })
 		List<User>list= query.list();
 		if(list==null)
 		{
@@ -66,7 +67,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 		else
 		{
-		return list.get(0);
+		return list;
 		}
 	}
 
@@ -74,6 +75,7 @@ public class UserDAOImpl implements UserDAO {
 	@Transactional
 	public User authuser(String username, String password) {
 		String hql = "from User where username= " + "'" + username + "'" + "and password= " + "'" + password + "'";
+		
 		Query query = sessionFactory.getCurrentSession().createQuery(hql);
 		List<User> list = query.list();
 		if (list == null) {
@@ -106,9 +108,12 @@ public class UserDAOImpl implements UserDAO {
 		@SuppressWarnings({ "unchecked", "deprecation" })
 		List<User> list = query.list();
 
-		if (list == null) {
+		if (list == null) 
+		{
 			return null;
-		} else {
+		} 
+		else 
+		{
 			return list.get(0);
 		}
 	}

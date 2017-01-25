@@ -12,8 +12,16 @@
       
     
 	<context:component-scan base-package="com.niit.project2B.*" />
+   
    <!--  <context:property-placeholder location="classpath:log4j.properties"/> -->
-    <mvc:resources mapping="/resources/**" location="/resources/" />
+   
+   <mvc:resources mapping="/resources/**" location="/resources/" />
 	              <mvc:annotation-driven />
+	              
+     <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="2000000" />
+	</bean>
+   
 
 </beans>

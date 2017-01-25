@@ -1,5 +1,6 @@
 package com.niit.project2B.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.niit.project2B.DAO.UserDAO;
 import com.niit.project2B.model.User;
@@ -23,8 +25,8 @@ public class UserController {
 	@PostMapping(value = "/register")
 	public ResponseEntity<User> adduser(@RequestBody User user) {
 		System.out.println("hello");
-		user.setDob(new java.util.Date());
 		user.setStatus('n');
+		user.setIsonline('N');
 		userDAO.saveorupdate(user);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 
@@ -44,17 +46,14 @@ public class UserController {
 		return new ResponseEntity<User>(oneuser, HttpStatus.OK);
 	}
 
-	/*@PostMapping("/imageUpload")
+	@PostMapping("/imageUpload")
 	public void ImageUpload(@RequestBody MultipartFile file, HttpSession session) throws IOException {
-		String username = (String) session
-				.getAttribute("username");  Get Logged in Username 
-		Users users = usersDAO
-				.profileof(username);  Get user object based on username 
-		System.out.println(file.getContentType() + '\n' + file.getName() + '\n' + file.getSize() + '\n'
-				+ file.getOriginalFilename());
-		users.setImage(file.getBytes());
-		usersDAO.saveOrUpdate(users);
-	}*/
+		String username = (String) session.getAttribute("username");  //Get Logged in Username 
+		User user = userDAO.profileof(username);  //Get user object based on username 
+		System.out.println(file.getContentType() + '\n' + file.getName() + '\n' + file.getSize() + '\n'+ file.getOriginalFilename());
+		user.setImage(file.getBytes());
+		userDAO.saveorupdate(user);
+	}
 
 	@GetMapping("/profileimage")
 	public ResponseEntity<User> profileimage(HttpSession session) {
