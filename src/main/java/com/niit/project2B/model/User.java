@@ -27,7 +27,7 @@ public class User {
 	private char status;
 	private char isonline;
 	private byte[] image;
-
+	
 	public byte[] getImage() {
 		return image;
 	}

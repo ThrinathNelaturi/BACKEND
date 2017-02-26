@@ -68,5 +68,20 @@ public class BlogDAOImpl implements BlogDAO{
 		return list;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Transactional
+	public List<Blog> userlist() {
+		String hql= "from Blog where status='a'";
+		Query query = sessionFactory.getCurrentSession().createQuery(hql);
+		List<Blog> list=query.list();
+		if(list==null){
+		return null;
+		}
+		else{
+			return list;
+		
+		}
+	}
+	
 
 }

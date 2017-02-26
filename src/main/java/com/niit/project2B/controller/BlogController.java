@@ -33,6 +33,7 @@ public class BlogController {
 		String name=blog.getTitle();
 		System.out.println(name);
 		String uid=(String) session.getAttribute("username");
+		blog.setStatus("n");//new-blog
 		blog.setDoc(new Date());
 		blog.setUserid(uid);
 		blogDAO.saveOrUpdate(blog);
@@ -42,6 +43,13 @@ public class BlogController {
 	
 	@GetMapping(value="/blog")
 	public ResponseEntity<List<Blog>> listblog(){
+		System.out.println("list of blog");
+		List<Blog> blog =blogDAO.list();
+		return new ResponseEntity<List<Blog>>(blog,HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/adminblog")
+	public ResponseEntity<List<Blog>> adminblog(){
 		System.out.println("list of blog");
 		List<Blog> blog =blogDAO.list();
 		return new ResponseEntity<List<Blog>>(blog,HttpStatus.OK);
@@ -78,4 +86,19 @@ public class BlogController {
 		return new ResponseEntity<Blog>(HttpStatus.OK);
 	}
 
+	@PostMapping(value="/acceptblog/{id}")
+	public ResponseEntity<Blog> accept(@PathVariable("id") int id){
+		Blog blog=blogDAO.get(id);
+		blog.setStatus("a");//accept
+		blogDAO.saveOrUpdate(blog);
+		return new ResponseEntity<Blog>(HttpStatus.OK);	
+	}
+	
+	@PostMapping(value="/rejectblog/{id}")
+	public ResponseEntity<Blog> reject(@PathVariable("id") int id){
+		Blog blog=blogDAO.get(id);
+		blog.setStatus("r");//reject
+		blogDAO.saveOrUpdate(blog);
+		return new ResponseEntity<Blog>(HttpStatus.OK);	
+	}
 }
